@@ -1,0 +1,168 @@
+
+Current configuration : 4627 bytes
+!
+! No configuration change since last restart
+!
+version 15.0
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname Dragonfly_SERVERS
+!
+boot-start-marker
+boot-end-marker
+!
+logging buffered 51200 warnings
+no logging console
+!
+no aaa new-model
+!
+no ipv6 cef
+ip source-route
+ip cef
+!
+!
+!
+!
+ip domain name yourdomain.com
+multilink bundle-name authenticated
+!
+!
+!
+crypto pki trustpoint TP-self-signed-2642599474
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-2642599474
+ revocation-check none
+ rsakeypair TP-self-signed-2642599474
+!
+!
+crypto pki certificate chain TP-self-signed-2642599474
+ certificate self-signed 01
+  30820259 308201C2 A0030201 02020101 300D0609 2A864886 F70D0101 04050030
+  31312F30 2D060355 04031326 494F532D 53656C66 2D536967 6E65642D 43657274
+  69666963 6174652D 32363432 35393934 3734301E 170D3131 30373134 31363537
+  30395A17 0D323030 31303130 30303030 305A3031 312F302D 06035504 03132649
+  4F532D53 656C662D 5369676E 65642D43 65727469 66696361 74652D32 36343235
+  39393437 3430819F 300D0609 2A864886 F70D0101 01050003 818D0030 81890281
+  8100DA79 A45D5746 0A982661 170286E8 F634F9A5 8ABCFAB8 F5D6A953 0A4A0490
+  6251A81D A5E1F5BB 67C399B5 70031690 98C00D81 E5766C67 F9D13A58 9349C496
+  3AC55DD2 8B963CF3 0BDA68FF AD562C94 FC2B1AE3 32F21F41 FADAD18F 86651A53
+  973C5A7E 9AFD32F4 AC10D6E0 E14FBB32 2143A845 1705705F 8D3BC932 8A81A777
+  B2390203 010001A3 8180307E 300F0603 551D1301 01FF0405 30030101 FF302B06
+  03551D11 04243022 82204472 61676F6E 666C795F 53455256 4552532E 796F7572
+  646F6D61 696E2E63 6F6D301F 0603551D 23041830 16801496 95CDD970 FBC1E413
+  830E974E 43501AD7 FF0F5930 1D060355 1D0E0416 04149695 CDD970FB C1E41383
+  0E974E43 501AD7FF 0F59300D 06092A86 4886F70D 01010405 00038181 00D20F77
+  CE0EBB3B 15A1BCA7 A2BD5F11 08D510F2 C74C568F 25A426F2 660ED18B 2A735028
+  A0BB2BD5 77E8900F 1BE81861 88826650 252DE25F 37E0F962 A7068BBD B82C00C7
+  ADC2FC94 85DEC246 689CC04A 9F4B2CE8 4DC04F82 488CC8DC 49E6B49D 9ABA112B
+  859539A9 8A5BAEB0 69236C72 64DC130C 16635C49 3702EAB1 BE648450 DF
+        quit
+license udi pid CISCO2911/K9 sn FCZ152570LL
+!
+!
+username swghana privilege 15 password 0 1p0we@&$^@
+!
+!
+!
+!
+!
+!
+interface GigabitEthernet0/0
+ description TO_LAN_SEGMENT ROUTER
+ ip address 172.17.0.253 255.255.255.252
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/1
+ description Server_Farm_LAN$ES_LAN$
+ ip address 172.16.100.254 255.255.255.0
+ ip access-group internet in
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/2
+ no ip address
+ duplex auto
+ speed auto
+!
+ip forward-protocol nd
+!
+ip http server
+ip http access-class 23
+ip http authentication local
+ip http secure-server
+ip http timeout-policy idle 60 life 86400 requests 10000
+!
+ip route 0.0.0.0 0.0.0.0 172.17.0.254
+ip route 192.168.0.0 255.255.255.0 172.17.0.254
+!
+ip access-list extended internet
+ permit ip host 172.16.100.0 any
+ permit ip host 172.16.100.7 any
+ permit ip host 172.16.100.17 any
+ permit ip host 172.16.100.15 any
+ permit ip host 172.16.100.1 any
+ permit ip host 172.16.100.31 any
+ permit ip host 172.16.100.36 any
+ permit ip host 172.16.100.60 any
+ permit ip host 172.16.100.40 any
+ permit ip host 172.16.100.41 any
+ permit ip host 172.16.100.53 any
+ permit ip host 172.16.100.61 any
+ permit ip host 172.16.100.62 any
+ permit ip host 172.16.100.63 any
+ permit ip host 172.16.100.39 any
+ permit ip host 172.16.100.35 any
+ permit ip host 172.16.100.38 any
+ permit ip host 172.16.100.51 any
+ permit ip 172.16.100.0 0.0.0.255 192.168.0.0 0.0.0.255
+ permit ip host 172.16.100.72 any
+ permit ip host 172.16.100.70 any
+ permit ip host 172.16.100.13 any
+ permit ip host 172.16.100.2 any
+ permit ip host 172.16.100.11 any
+ permit ip host 172.16.100.3 any
+ permit ip host 172.16.100.50 any
+ permit ip host 172.16.100.100 any
+ deny any any
+!
+access-list 23 remark allow_tenet 192.168.0.0 0.0.0.255
+access-list 23 remark allow_tenet 172.16.100.0 0.0.0.255
+access-list 23 permit 172.16.100.64
+!
+!
+snmp-server community SGMCmon RW
+!
+control-plane
+!
+banner login ^CC
+
+-----------------------------------------------------------------------
+This Sweeden Ghana medical center ,if you are not authorize to access
+this device please log out
+
+-----------------------------------------------------------------------
+^C
+!
+line con 0
+ password 1p0we@7462
+ login
+line aux 0
+line vty 0 4
+ access-class 23 in
+ privilege level 15
+ password 1p0we@7462
+ login local
+ transport input telnet ssh
+line vty 5 15
+ access-class 23 in
+ privilege level 15
+ login local
+ transport input telnet ssh
+line vty 16
+ login local
+!
+scheduler allocate 20000 1000
+end
